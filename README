@@ -1,0 +1,30 @@
+README
+ 
+
+
+ARCHITECTURE
+
+This file purpose is to explain how I've chosen to implement a multihread web server with thread-pooling.
+
+Basically, after doing some research and based on what I already knew, I identified three options :
+
+1) Writing it from scratch using NIO/NIO 2.0 API provided by the JDK. Using Selector and channels seemed to be the
+good (asynchronous) way to implement it, with a ExecutorService in conjunction
+for the multi-threading part. That would have been the occasion to put into practice the Reactor pattern explained
+by Doug Lea(http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf)
+
+2) Using the com.sun.net.httpserver implementation provided by the JDK6. Even using an interface
+from this package (com.sun.*) is not forbidden by the FAQ available at this URL
+http://www.oracle.com/technetwork/java/faq-sun-packages-142232.html, the default implementation is inside
+the sun.* package, and therefore there was a risk that my code is not portable across JREs.
+
+3) Building the web server on top of a NIO client server framework and thus benefit of all the good work done
+by Trustin Lee (Apache MINA, Netty).
+
+Considering the time I had to implement this solution, and being a great defender
+of the "Don't Reinvent the wheel" principle, I went with the third option. Obviously, I'm aware that you may not be able
+ to fully evaluate my skills as a HTTP server example is bundled with Netty( I took inspiration from the source code, as
+ stated into the related files), but one of the challenge was to upgrade/improve this example by using the JDK7 NIO API,
+ adding some features and be able to explain how it works under the hood.
+
+Happy review !

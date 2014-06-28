@@ -11,6 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:4.0.20.Final" level="project" />
   </component>
 </module>
 
