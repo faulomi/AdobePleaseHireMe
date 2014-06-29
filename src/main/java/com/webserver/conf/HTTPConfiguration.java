@@ -1,6 +1,7 @@
 package com.webserver.conf;
 
-import com.webserver.HTTPServer;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.validators.PositiveInteger;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,17 +12,12 @@ import java.nio.file.Paths;
  */
 public class HTTPConfiguration {
 
+
     private final int port;
     private final Path rootPath;
     private final boolean useSSL;
 
 
-
-
-    public static HTTPConfiguration defaultConfiguration(){
-
-        return new Builder().build();
-    }
 
 
     private HTTPConfiguration(Builder builder){
@@ -30,6 +26,11 @@ public class HTTPConfiguration {
         this.rootPath = builder.rootPath;
         this.useSSL = builder.useSSL;
 
+    }
+
+    public static HTTPConfiguration defaultConfiguration() {
+
+        return new Builder().build();
     }
 
     public boolean useSSL() {
@@ -46,9 +47,13 @@ public class HTTPConfiguration {
 
     public static class Builder {
 
+
+        @Parameter(names = {"-port"}, description = "Http server listening port. (default : 8080)", validateWith = PositiveInteger.class)
         private int port = 8080;
+        @Parameter(names = {"-rootPath"}, description = "Root path for the static files (default : current working directory)", converter = PathConverter.class)
         private Path rootPath= Paths.get("");
-        private boolean useSSL = false;
+        @Parameter(names = {"-useSSL"}, description = "SSL mode. (default : ")
+        private Boolean useSSL = false;
 
 
         public Builder(){
@@ -56,10 +61,7 @@ public class HTTPConfiguration {
 
         }
 
-        public Builder(String properties){
 
-
-        }
 
         public Builder port(int port){
             this.port = port;
@@ -93,10 +95,6 @@ public class HTTPConfiguration {
             return new HTTPConfiguration(this);
 
         }
-
-
-
-
 
     }
 

@@ -27,7 +27,10 @@ import io.netty.util.CharsetUtil;
 import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.URLDecoder;
-import java.nio.file.*;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -93,7 +96,16 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
     public static final int HTTP_CACHE_SECONDS = 60;
     private static final Pattern INSECURE_URI = Pattern.compile(".*[<>&\"].*");
     private static final Pattern ALLOWED_FILE_NAME = Pattern.compile("[A-Za-z0-9][-_A-Za-z0-9\\.]*");
-    public Path rootPath = Paths.get(System.getProperty("user.dir"));
+
+
+    private final Path rootPath;
+
+
+    public HttpStaticFileServerHandler(Path rootPath) {
+
+        this.rootPath = rootPath;
+    }
+
 
     private static String sanitizeUri(String uri) {
         // Decode the path.
@@ -125,7 +137,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
         return uri;
     }
 
-    private static void sendListing(ChannelHandlerContext ctx, Path dir) {
+    private static void sendListing(ChannelHandlerContext ctx, Path root, Path absolutePath) {
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK);
         response.headers().set(CONTENT_TYPE, "text/html; charset=UTF-8");
 
@@ -135,18 +147,28 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
         buf.append("<!DOCTYPE html>\r\n");
         buf.append("<html><head><title>");
         buf.append("Listing of: ");
-        buf.append(dir.getFileName());
+
+
+        //Root filename (in case the root path corresponds to the root of the filesystem (i.e c:\\)
+        String filename = "/";
+
+        Path relativePath = root.relativize(absolutePath);
+
+        if (!relativePath.getFileName().toString().isEmpty())
+            filename = absolutePath.getFileName().toString();
+
+        buf.append(filename);
         buf.append("</title></head><body>\r\n");
 
         buf.append("<h3>Listing of: ");
-        buf.append(dir.getFileName());
+        buf.append(filename);
         buf.append("</h3>\r\n");
 
         buf.append("<ul>");
         buf.append("<li><a href=\"../\">..</a></li>\r\n");
 
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, new DirectoryStream.Filter<Path>() {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(absolutePath, new DirectoryStream.Filter<Path>() {
 
 
             @Override
@@ -287,7 +309,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 
         if (Files.isDirectory(fileAbsolutePath)) {
             if (uri.endsWith("/")) {
-                sendListing(ctx, fileAbsolutePath);
+                sendListing(ctx, rootPath, fileAbsolutePath);
             } else {
                 sendRedirect(ctx, uri + '/');
             }

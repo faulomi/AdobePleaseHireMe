@@ -1,7 +1,6 @@
 
 
 
-
 /*
 * Copyright 2012 The Netty Project
 *
@@ -28,12 +27,16 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
+import java.nio.file.Path;
+
 public class HttpStaticFileServerInitializer extends ChannelInitializer<SocketChannel> {
 
     private final SslContext sslCtx;
+    private final Path rootPath;
 
-    public HttpStaticFileServerInitializer(SslContext sslCtx) {
+    public HttpStaticFileServerInitializer(SslContext sslCtx, Path rootPath) {
         this.sslCtx = sslCtx;
+        this.rootPath = rootPath;
     }
 
     @Override
@@ -45,6 +48,6 @@ public class HttpStaticFileServerInitializer extends ChannelInitializer<SocketCh
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpObjectAggregator(65536));
         pipeline.addLast(new ChunkedWriteHandler());
-        pipeline.addLast(new HttpStaticFileServerHandler());
+        pipeline.addLast(new HttpStaticFileServerHandler(rootPath));
     }
 }

@@ -15,6 +15,8 @@
 */
 package com.webserver;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import com.webserver.conf.HTTPConfiguration;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -29,9 +31,6 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 public class HTTPServer {
 
-
-
-
     private HTTPConfiguration configuration;
 
 
@@ -40,8 +39,27 @@ public class HTTPServer {
 
     }
 
+    public HTTPServer() {
 
-    public void start() throws Exception{
+        this(HTTPConfiguration.defaultConfiguration());
+    }
+
+    public static void main(String[] args) throws Exception {
+        HTTPConfiguration.Builder configurationBuilder = new HTTPConfiguration.Builder();
+        final JCommander jCommander = new JCommander(configurationBuilder);
+        try {
+            jCommander.parse(args);
+            final HTTPServer httpServer = new HTTPServer(configurationBuilder.build());
+            httpServer.start();
+        } catch (ParameterException e) {
+            e.printStackTrace();
+            jCommander.usage();
+        }
+
+
+    }
+
+    public void start() throws Exception {
 
         // Configure SSL.
         final SslContext sslCtx;
@@ -60,12 +78,12 @@ public class HTTPServer {
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new HttpStaticFileServerInitializer(sslCtx));
+                    .childHandler(new HttpStaticFileServerInitializer(sslCtx, configuration.getRootPath()));
 
             Channel ch = b.bind(configuration.getPort()).sync().channel();
 
             System.err.println("Open your web browser and navigate to " +
-                    (configuration.useSSL()? "https" : "http") + "://127.0.0.1:" + configuration.getPort() + '/');
+                    (configuration.useSSL() ? "https" : "http") + "://127.0.0.1:" + configuration.getPort() + '/');
 
             ch.closeFuture().sync();
         } finally {
@@ -73,16 +91,6 @@ public class HTTPServer {
             workerGroup.shutdownGracefully();
         }
 
-
-    }
-
-
-
-    public static void main(String[] args) throws Exception {
-
-        HTTPConfiguration configuration = new HTTPConfiguration.Builder().build();
-        final HTTPServer httpServer = new HTTPServer(configuration);
-        httpServer.start();
 
     }
 }
