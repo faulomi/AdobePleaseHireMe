@@ -48,11 +48,11 @@ public class HTTPConfiguration {
     public static class Builder {
 
 
-        @Parameter(names = {"-port"}, description = "Http server listening port. (default : 8080)", validateWith = PositiveInteger.class)
+        @Parameter(names = {"-port"}, description = "Http server listening port.", validateWith = PositiveInteger.class)
         private int port = 8080;
-        @Parameter(names = {"-rootPath"}, description = "Root path for the static files (default : current working directory)", converter = PathConverter.class)
-        private Path rootPath= Paths.get("");
-        @Parameter(names = {"-useSSL"}, description = "SSL mode. (default : ")
+        @Parameter(names = {"-rootPath"}, description = "Static files root path.", converter = PathConverter.class)
+        private Path rootPath = Paths.get(System.getProperty("user.dir"));
+        @Parameter(names = {"-useSSL"}, description = "SSL mode.")
         private Boolean useSSL = false;
 
 
