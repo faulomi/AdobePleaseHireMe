@@ -17,7 +17,7 @@ package com.webserver;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import com.webserver.conf.HTTPConfiguration;
+import com.webserver.conf.HttpConfiguration;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -29,27 +29,27 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
-public class HTTPServer {
+public class HttpServer {
 
-    private HTTPConfiguration configuration;
+    private HttpConfiguration configuration;
 
 
-    public HTTPServer(HTTPConfiguration configuration){
+    public HttpServer(HttpConfiguration configuration){
         this.configuration = configuration;
 
     }
 
-    public HTTPServer() {
+    public HttpServer() {
 
-        this(HTTPConfiguration.defaultConfiguration());
+        this(HttpConfiguration.defaultConfiguration());
     }
 
     public static void main(String[] args) throws Exception {
-        HTTPConfiguration.Builder configurationBuilder = new HTTPConfiguration.Builder();
+        HttpConfiguration.Builder configurationBuilder = new HttpConfiguration.Builder();
         final JCommander jCommander = new JCommander(configurationBuilder);
         try {
             jCommander.parse(args);
-            final HTTPServer httpServer = new HTTPServer(configurationBuilder.build());
+            final HttpServer httpServer = new HttpServer(configurationBuilder.build());
             httpServer.start();
         } catch (ParameterException e) {
             e.printStackTrace();
@@ -58,6 +58,8 @@ public class HTTPServer {
 
 
     }
+
+
 
     public void start() throws Exception {
 

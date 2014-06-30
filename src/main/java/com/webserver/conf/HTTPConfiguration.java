@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 /**
  * Created by jmeuret on 28/06/2014.
  */
-public class HTTPConfiguration {
+public class HttpConfiguration {
 
 
     private final int port;
@@ -20,7 +20,7 @@ public class HTTPConfiguration {
 
 
 
-    private HTTPConfiguration(Builder builder){
+    private HttpConfiguration(Builder builder){
 
         this.port = builder.port;
         this.rootPath = builder.rootPath;
@@ -28,7 +28,7 @@ public class HTTPConfiguration {
 
     }
 
-    public static HTTPConfiguration defaultConfiguration() {
+    public static HttpConfiguration defaultConfiguration() {
 
         return new Builder().build();
     }
@@ -55,6 +55,38 @@ public class HTTPConfiguration {
         @Parameter(names = {"-useSSL"}, description = "SSL mode.")
         private Boolean useSSL = false;
 
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("Builder{");
+            sb.append("port=").append(port);
+            sb.append(", rootPath=").append(rootPath);
+            sb.append(", useSSL=").append(useSSL);
+            sb.append('}');
+            return sb.toString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Builder builder = (Builder) o;
+
+            if (port != builder.port) return false;
+            if (rootPath != null ? !rootPath.equals(builder.rootPath) : builder.rootPath != null) return false;
+            if (useSSL != null ? !useSSL.equals(builder.useSSL) : builder.useSSL != null) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = port;
+            result = 31 * result + (rootPath != null ? rootPath.hashCode() : 0);
+            result = 31 * result + (useSSL != null ? useSSL.hashCode() : 0);
+            return result;
+        }
 
         public Builder(){
 
@@ -84,7 +116,7 @@ public class HTTPConfiguration {
 
 
 
-        public HTTPConfiguration build(){
+        public HttpConfiguration build(){
 
 
             //Check rootPath
@@ -92,7 +124,7 @@ public class HTTPConfiguration {
                 throw new IllegalArgumentException("Invalid value for rootpath directive : " + rootPath);
 
 
-            return new HTTPConfiguration(this);
+            return new HttpConfiguration(this);
 
         }
 
