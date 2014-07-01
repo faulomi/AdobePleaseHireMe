@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>fr.meuret</groupId>
+    <artifactId>adobe-web-tech-test</artifactId>
+    <name>Adobe Web Tech Test AEM</name>
+    <version>1.0</version>
+    <description>A multi-threaded (e.g. file-based) web server with thread-pooling implemented in Java.</description>
+    <url>https://github.com/faulomi/AdobePleaseHireMe</url>
+    <developers>
+        <developer>
+            <name>Jérôme Meuret</name>
+            <email>jerome.meuret@gmail.com</email>
+        </developer>
+    </developers>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.1</version>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>fr.meuret.web.HttpServer</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer>
+                                    <mainClass>fr.meuret.web.HttpServer</mainClass>
+                                </transformer>
+                                <transformer>
+                                    <addHeader>false</addHeader>
+                                </transformer>
+                                <transformer/>
+                                <transformer>
+                                    <resource>META-INF/README</resource>
+                                    <file>README</file>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>
+

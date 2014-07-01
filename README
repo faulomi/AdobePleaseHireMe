@@ -66,8 +66,10 @@ I preferred to respect the deadline and as I'm currently employed, I didn't had 
 
 - Unit testing (using rest-assured for example : https://code.google.com/p/rest-assured/) : i'm not very proud of that...
 - Improve documentation but you still can generate it using : mvn javadoc:javadoc
-
+- Improve licensing notes
 
 
 
 Happy review !
+
+PS : I really really want that job !
