@@ -1,0 +1,51 @@
+<configuration scan="true">
+    <property name="LOGS_FOLDER" value="logs"/>
+    <property name="ARCHIVE_LOGS_FOLDER" value="archive-logs"/>
+
+    <appender name="log-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_FOLDER}/adobe-please-hire-me.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ARCHIVE_LOGS_FOLDE}adobe-please-hire-me.%d{yyyyMMdd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="troubleshooting-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_FOLDER}/adobe-please-hire-men-troubleshooting.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOGS_FOLDER}/adobe-please-hire-me-troubleshooting.%i.log</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="fr.meuret" level="debug">
+
+
+    </logger>
+
+    <root level="error">
+        <appender-ref ref="log-file"/>
+        <appender-ref ref="troubleshooting-file"/>
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>

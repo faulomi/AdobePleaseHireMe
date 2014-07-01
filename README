@@ -1,10 +1,8 @@
 README
- 
-
 
 ARCHITECTURE
 
-This file purpose is to explain how I've chosen to implement a multithread web server with thread-pooling.
+This file purpose is to explain how I've chosen to implement a multi-thread web server with thread-pooling.
 
 Basically, after doing some research and based on what I already knew, I identified three options :
 
@@ -26,5 +24,50 @@ Considering the time I had to implement this solution, and being a great defende
 fully evaluate my skills as a HTTP server example is bundled with Netty( I took inspiration from the source code, as
 stated into the related files), but one of the challenge was to upgrade/improve this example by using the JDK7 NIO API,
 adding some features and be able to explain how it works under the hood.
+
+
+PROJECT PROPERTIES
+
+The source code was written with Intellij IDEA 13, using a maven 3 project layout.
+
+
+HOW TO RUN THE PROGRAM
+
+Prerequisites
+
+- JDK 1.7.60
+- Maven 3.0.3 (and executable in the environment path)
+
+There are two options :
+
+
+1) Open a terminal and go the project root folder.
+1) Build the project running the following command : mvn package
+2) Go the target subdirectory and run the following command : java -jar adobe-web-tech-test-1.0.jar
+
+Please not that you can pass the following command-line parameters to the program:
+
+-port <port> : HTTP server listening port (default : 8080)
+-useSSL : Is the server running on SSL ? (self-signed certificate) (default : false)
+-rootPath : root path for the static files (default : current working directory)
+
+You can find the log files in the logs directory.
+
+The second way to execute the program is to directly use the following command :
+
+mvn exec:exec
+
+But in this case, no logs will be output to the console so I recommend the first solution.
+
+
+LACKS & IMPROVEMENTS
+
+I preferred to respect the deadline and as I'm currently employed, I didn't had the time necessary for implementing all I wanted to implement.
+
+- Unit testing (using rest-assured for example : https://code.google.com/p/rest-assured/) : i'm not very proud of that...
+- Improve documentation but you still can generate it using : mvn javadoc:javadoc
+
+
+
 
 Happy review !

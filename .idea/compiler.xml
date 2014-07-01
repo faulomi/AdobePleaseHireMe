@@ -23,8 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="AdobePleaseHireMe" />
+        <module name="AdobeWebTechTest" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="AdobeWebTechTest" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 
