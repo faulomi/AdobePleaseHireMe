@@ -14,8 +14,8 @@
     <artifactId>adobe-web-tech-test</artifactId>
     <version>1.0</version>
     <description>A multi-threaded (e.g. file-based) web server with thread-pooling implemented in Java.</description>
-    <name>Adobe Web Tech Test AEM</name>
-    <url>https://github.com/faulomi/AdobePleaseHireMe</url>
+    <name>Http Server based one Netty</name>
+    <url>https://github.com/faulomi/HttpServerBasedOnNetty</url>
     <developers>
         <developer>
             <name>Jérôme Meuret</name>
